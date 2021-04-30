@@ -5,7 +5,10 @@
 </template>
 <script>
 export default {
-    name: 'home'
+    name: 'dashboard',
+    mounted() {
+        this.$store.commit('SET_LAYOUT', 'principal-layout')
+    },
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

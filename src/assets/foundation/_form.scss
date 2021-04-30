@@ -1,0 +1,30 @@
+$primary:#0168fa;
+$primary-hover: #00337A;
+$primary-rgb: rgba(1, 104, 250, 0.35);
+$body: #001737;
+$text: #7a7a7a;
+
+.button {
+    font-size: 0.875em !important;
+    padding: 1.26em 2em !important;
+}
+
+.button:before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 1s ease;
+}
+
+.button:hover:before {
+    width: 100%;
+}
+
+input:focus, textarea:focus {
+    border-color: $primary !important;
+    box-shadow: 0 0 0 0.125em $primary-rgb !important;
+}

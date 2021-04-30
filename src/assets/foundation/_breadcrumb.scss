@@ -1,0 +1,60 @@
+$primary:#0168fa;
+$primary-hover: #00337A;
+$primary-rgb: rgba(1, 104, 250, 0.35);
+$body: #001737;
+$text: #7a7a7a;
+
+.subtitle {
+    font-weight: 500 !important;
+    letter-spacing: -0.5px;
+}
+
+.button {
+    font-weight: 500;
+}
+
+.card {
+    border: 1px solid rgba(122, 122, 122, 0.3) !important;
+    box-shadow: none !important;
+    margin-top: 0.8em !important;
+}
+
+.card-header {
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(122, 122, 122, 0.3) !important;
+}
+
+.card-header-title {
+    font-weight: 500 !important;
+    color: $body !important;
+    box-shadow: none !important;
+}
+
+.tab-content{
+    background-color: #ffffff;
+    border-left: 1px solid rgba(122, 122, 122, 0.3) !important;
+    border-right: 1px solid rgba(122, 122, 122, 0.3) !important;
+    border-bottom: 1px solid rgba(122, 122, 122, 0.3) !important;
+    padding: 2em !important;
+}
+
+nav.tabs.is-boxed{
+    ul{
+        li{
+            a{
+                color: $body !important;
+            }
+            &.is-active{
+                a{
+                    color: $primary !important;
+                }
+            }
+        }
+    }
+}
+
+.pagination-link.is-current {
+    background-color: $primary !important;
+    border-color: $primary !important;
+    color: #fff !important;
+}

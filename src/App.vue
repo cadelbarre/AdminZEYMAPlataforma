@@ -1,32 +1,24 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+    <component :is="layout"></component>
 </template>
+<script>
+import loginLayout from './layout/Login.vue'
+import principalLayout from './layout/Dashboard.vue'
+import errorLayout from './layout/TheError404.vue'
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+import { mapState } from 'vuex'
+export default {
+    components: {
+        loginLayout,
+        principalLayout,
+        errorLayout
+    },
+    computed: {
+        ...mapState(['layout'])
     }
-  }
+
 }
+</script>
+<style lang="scss">
+@import "./assets/main.scss";
 </style>

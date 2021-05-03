@@ -2,7 +2,7 @@
     <div id="app">
         <section class="hero has-text-light is-fullheight">
             <div class="hero-body">
-                <div class="container">
+                <div class="container px-6">
                     <div class="columns is-vcentered">
                         <div class="column is-6">
                             <b-image :src="require('@/static/error404.webp')" ratio="1by1">
@@ -25,8 +25,17 @@
                     </div>
                 </div>
             </div>
+            <Footer />
         </section>
     </div>
 </template>
+<script>
+import Footer from '@/layout/TheFooter.vue'
+export default {
+    components: {
+        Footer
+    }
+}
+</script>
 <style lang="scss">
 </style>

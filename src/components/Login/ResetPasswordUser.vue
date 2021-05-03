@@ -9,10 +9,11 @@
         <p class="has-text-justified mb-5">
             Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.
         </p>
+        <!-- :type="email != null ? 'is-danger' : ''" -->
         <b-field grouped group-multiline position="is-centered">
-            <b-input ref="resetPass" placeholder="Ingrese su correo electrónico." expanded v-model="email" :type="email != null ? 'is-danger' : ''"></b-input>
+            <b-input type="email" ref="resetPass" placeholder="Ingrese su correo electrónico." expanded v-model="email"></b-input>
             <p class="control">
-                <b-button label="Restaurar Contraseña" type="is-info" expanded @click="recoveryPassword(email)"></b-button>
+                <b-button label="Restaurar Contraseña" type="is-info" expanded @click="recoveryPassword(email)" :loading="isLoading"></b-button>
             </p>
         </b-field>
         <hr>
@@ -24,24 +25,40 @@
 <script>
 import Auth from "@/classes/AuthUser";
 import Toast from "@/classes/Toast";
+import { SnackbarProgrammatic as Snackbar } from 'buefy'
 
 export default {
     name: 'resetPassword',
     data() {
         return {
-            email: null
+            email: null,
+            isLoading: false
         }
     },
     mounted() {
         this.$refs.resetPass.focus()
     },
     methods: {
-        recoveryPassword(email) {
-            Auth.recoveryPassword(email).then((response)=>{
-                Toast.success(`Se envió un correo electrónico de restablecimiento de contraseña.`)
-            }).catch((e)=>{
-                Toast.error(`${e.code} - ${e.message}`)
-            })
+        async recoveryPassword(email) {
+            let that = this
+            that.isLoading = true
+            if (email) {
+                await Auth.recoveryPassword(email).then(function() {
+                    console.log('this');
+                    Snackbar.open({
+                        message: 'Se envió un correo electrónico para reestablecer su contraseña.',
+                        position: 'is-top'
+                    })
+                    that.email = null
+                    that.isLoading = false
+                }).catch(function(e) {
+                    Toast.error(`${e.code} - ${e.message}`)
+                    that.isLoading = false
+                    that.$refs.resetPass.focus()
+                })
+            } else {
+                Toast.error(`Debe ingresar un correo electrónico valido.`)
+            }
         }
     }
 
@@ -51,6 +68,7 @@ export default {
 <style scoped lang="scss">
 /deep/ .b-skeleton {
     height: 100%;
+    // background-color: #ffffff;
     position: absolute;
     top: 0;
 }

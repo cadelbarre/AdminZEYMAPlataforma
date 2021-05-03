@@ -5,7 +5,7 @@
         <b-tabs type="is-boxed" class="has-shadow">
             <b-tab-item label="Cliente">
                 <SelectClient />
-                <DebtClient />
+                
             </b-tab-item>
             <b-tab-item label="Orden Pedido">
                 <TableProduct />
@@ -18,14 +18,13 @@
 import BreadCrumb from '../../breadCrumb.vue'
 import SelectClient from './SelectClient.vue'
 import TableProduct from './TableProduct.vue'
-import DebtClient from './DebtClient.vue'
+
 export default {
     name: 'agregarPedido',
     components: {
         BreadCrumb,
         SelectClient,
         TableProduct,
-        DebtClient
     }
 }
 </script>

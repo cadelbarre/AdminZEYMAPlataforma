@@ -9,7 +9,11 @@
             </header>
             <div class="card-content">
                 <b-field label="Seleccionar Cliente">
-                    <b-input type="text" placeholder="Ej. 123456 - Drogueria Carlos - Carlos delbarre" expanded></b-input>
+                    <b-autocomplete ref="selectClientDebt" field="nombre" v-model="clientName" :data="filteredDataClientsList" expanded placeholder="Ej. 123456 - Drogueria Carlos - Carlos delbarre" clearable @select="(option) => (selected = option)
+                    ">
+                        <template slot="empty">No hay resultados encontrados.</template>
+                    </b-autocomplete>
+                    <!-- <b-input type="text" placeholder="Ej. 123456 - Drogueria Carlos - Carlos delbarre" expanded></b-input> -->
                     <p class="control">
                         <b-button type="is-info" label="Buscar" />
                     </p>
@@ -20,10 +24,13 @@
     </section>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     name: 'indexCartera',
     data() {
         return {
+            clientName: '',
+            selected: null,
             data: [
                 { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'date': '2016-10-15 13:43:27', 'gender': 'Male' },
                 { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'date': '2016-12-15 06:00:53', 'gender': 'Male' },
@@ -92,6 +99,23 @@ export default {
             ]
         }
     },
+    mounted(){
+        this.$refs.selectClientDebt.focus()
+    },
+    asyncComputed: {
+        ...mapState('clients', ['client_list']),
+        async filteredDataClientsList() {
+            return await this.client_list.filter((option) => {
+                return (
+                    option.nombre
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(this.clientName.toLowerCase()) >= 0
+                );
+            });
+        },
+
+    }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

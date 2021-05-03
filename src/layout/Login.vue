@@ -19,7 +19,6 @@
 <script>
 import Footer from '@/layout/TheFooter.vue'
 export default {
-
     components: {
         Footer
     }

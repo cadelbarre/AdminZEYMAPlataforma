@@ -6,6 +6,9 @@ import store from './store'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
+import AsyncComputed from 'vue-async-computed'
+Vue.use(AsyncComputed);
+
 Vue.use(Buefy)
 
 Vue.config.productionTip = false

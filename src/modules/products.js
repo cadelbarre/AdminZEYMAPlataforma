@@ -1,14 +1,12 @@
 export default {
-  namespace: true,
-  state: {
-    layout: "login-layout",
-  },
-  mutations: {
-    SET_LAYOUT(state, newLayout) {
-      state.layout = newLayout;
+    namespaced: true,
+    state: {
+
     },
-  },
-  actions: {},
-  getters: {},
-  modules: {},
+    mutations: {
+
+    },
+    actions: {},
+    getters: {},
+    modules: {},
 };

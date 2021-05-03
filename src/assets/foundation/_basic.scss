@@ -1,22 +1,24 @@
-$primary:#0168fa;
-$primary-hover: #00337A;
-$primary-rgb: rgba(1, 104, 250, 0.35);
-$body: #001737;
-$text: #7a7a7a;
-
 .box {
     padding: 4em 3em !important;
 }
 
 a {
     color: $primary !important;
+    &.dropdown-item{
+    	color: $body !important;
+        &:hover{
+            color: #ffffff  !important;
+            background-color: $hover-text !important;
+        }
+    }
 
     &:hover {
         color: $primary-hover !important;
     }
 }
 
-hr{
-	margin: 0.3em 0px !important;
+.navbar-dropdown {
+    hr {
+        margin: 0.3em 0px !important;
+    }
 }
-

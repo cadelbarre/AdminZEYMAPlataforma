@@ -5,8 +5,8 @@
             <p>Registarse solo le tomará unos minutos</p>
         </div>
         <!-- Este es un input de busqueda -->
-        <b-field label="Nit">
-            <b-input ref="nitCustomer" type="text" placeholder="Ej. 900123456"></b-input>
+        <b-field label="NIT" message="Ingrese el NIT de su establecimiento. Presione Enter para continuar. ">
+            <b-input ref="nitCustomer" type="text" placeholder="Ej. 900123456" v-model.trim="nit" ></b-input>
         </b-field>
         <b-field label="Nombre Establecimiento">
             <b-input type="text" placeholder="Ej. Drogueria Nicolas N3"></b-input>
@@ -36,11 +36,19 @@
     </div>
 </template>
 <script>
+// import Toast from "@/classes/Toast";
+// import RealDB from '@/classes/DataBase'
 export default {
     name: 'register',
+    data(){
+        return{
+            nit: ''
+        }
+    },
     mounted() {
         this.$refs.nitCustomer.focus()
     },
+
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -20,7 +20,7 @@
                 </label>
             </div>
             <div class="field has-text-centered mt-5">
-                <b-button type="is-info" expanded label="Ingresar" @click="loginIt"></b-button>
+                <b-button type="is-info" expanded label="Ingresar" @click="loginIt" :loading="isLoading"></b-button>
                 <hr />
                 <p>
                     ¿ Nuevo en el sitio ?
@@ -31,6 +31,7 @@
     </section>
 </template>
 <script>
+import { mapActions } from 'vuex';
 import Auth from "@/classes/AuthUser";
 import Toast from "@/classes/Toast";
 export default {
@@ -39,6 +40,7 @@ export default {
         return {
             mail: "",
             password: "",
+            isLoading: false,
             error: {
                 mail: null,
                 password: null
@@ -50,15 +52,21 @@ export default {
         this.$refs.userLogin.focus();
     },
     methods: {
+        ...mapActions('clients', ['fetchClientsList']),
         async loginIt() {
+            let that = this
+            that.isLoading = true
             this.cleanVariables()
             if (this.verifyInput()) {
                 await Auth.signInUser(this.mail, this.password)
-                    .then(() => {
+                    .then( async () => {
+                        await this.fetchClientsList();
                         this.$router.push("/dashboard");
+                        that.isLoading = false
                     })
                     .catch((e) => {
                         Toast.error(`${e.code} - ${e.message}`);
+                        that.isLoading = false
                     });
             }
         },
@@ -71,10 +79,12 @@ export default {
         verifyInput() {
             if (this.mail == '') {
                 // this.$refs.userLogin.focus();
+                this.isLoading = false
                 return this.error.mail = "El campo del correo electrónico se encuentra vacio.";
             }
             if (this.password == '') {
                 // this.$refs.passwordLogin.focus();
+                this.isLoading = false
                 return this.error.password = "El campo de la contraseña se encuentra vacio.";
             }
 

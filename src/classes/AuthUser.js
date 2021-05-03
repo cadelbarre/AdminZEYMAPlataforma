@@ -16,6 +16,7 @@ export default class Auth {
     static recoveryPassword(email) {
         this.initializeApp()
         var auth = Firebase.auth();
-        auth.sendPasswordResetEmail(email)
+        return auth.sendPasswordResetEmail(email)
     }
+
 }

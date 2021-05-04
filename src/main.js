@@ -10,6 +10,9 @@ Vue.use(Buefy)
 import AsyncComputed from 'vue-async-computed'
 Vue.use(AsyncComputed);
 
+import Firebase from '@/classes/Config'
+Vue.use(Firebase)
+
 Vue.config.productionTip = false
 
 new Vue({

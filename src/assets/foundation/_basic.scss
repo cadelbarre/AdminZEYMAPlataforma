@@ -4,16 +4,29 @@
 
 a {
     color: $primary !important;
-    &.dropdown-item{
-    	color: $body !important;
-        &:hover{
-            color: #ffffff  !important;
+
+    &.dropdown-item {
+        color: $body !important;
+
+        &:hover {
+            color: #ffffff !important;
+            background-color: $hover-text !important;
+        }
+
+        &.is-hovered {
+            color: #ffffff !important;
             background-color: $hover-text !important;
         }
     }
 
     &:hover {
         color: $primary-hover !important;
+    }
+
+    &.pagination-link.is-current {
+        background-color: $primary;
+        border-color: $primary;
+        color: #fff;
     }
 }
 

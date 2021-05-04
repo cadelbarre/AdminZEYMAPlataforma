@@ -20,7 +20,7 @@
                 </b-field>
             </div>
         </div>
-        <DebtClient />
+        <DebtClient :clientSelected="selected"/>
     </section>
 </template>
 <script>
@@ -34,7 +34,7 @@ export default {
     data() {
         return {
             clientName: '',
-            selected: null,
+            selected: {},
         }
     },
     mounted() {

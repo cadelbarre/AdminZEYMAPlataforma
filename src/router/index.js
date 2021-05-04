@@ -39,6 +39,7 @@ const routes = [
   },
   {
     path: "/dashboard",
+    meta: { requiresAuth: true },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Dashboard.vue"),
     children: [

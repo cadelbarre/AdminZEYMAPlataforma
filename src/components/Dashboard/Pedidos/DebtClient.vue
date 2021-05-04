@@ -36,11 +36,42 @@
                 </div>
             </div>
         </div>
+        <pre>
+            {{getDebtClient}}
+        </pre>
+        <pre>
+            {{clientSelected}}
+        </pre>
     </section>
 </template>
 <script>
+import RealDB from '@/classes/DataBase'
 export default {
-    name: '_debtClient'
+    name: 'DebtClient',
+    props: {
+        clientSelected: {
+            type: Object, // String, Number, Boolean, Function, Object, Array
+            required: true,
+            default: () => {}
+        }
+    },
+    asyncComputed: {
+        async getDebtClient() {
+            if (!Object.keys(this.clientSelected).length === 0) {
+                let that = this
+                let db = new RealDB('MaesFact')
+                let debt = null
+                await db.orderByEqual('nombre', this.clientSelected.nombre).then(res => {
+                    that.debt = res.val()
+                    console.log(res.val())
+                }).catch(e => {
+                    console.log(e)
+                })
+
+                return debt
+            }
+        }
+    }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

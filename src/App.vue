@@ -16,9 +16,8 @@ export default {
     computed: {
         ...mapState(['layout'])
     }
-
 }
 </script>
-<style lang="scss">
-@import "./assets/main.scss";
+<style lang="scss" src="./assets/main.scss">
+<!-- @import "./assets/main.scss"; -->
 </style>

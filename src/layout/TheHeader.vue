@@ -34,16 +34,27 @@
         </template>
         <template #end>
             <b-image :src="require('@/static/avatar_general.png')" alt="The Buefy Logo" rounded class="is-48x48"></b-image>
+            <b-button label="LogOut" @click="logOutSession()"></b-button>
         </template>
         <SideBar/>
     </b-navbar>
 </template>
 <script>
-    import SideBar from '@/components/Setting/SideBar.vue'
+import Auth from '@/classes/AuthUser'
+import SideBar from '@/components/Setting/SideBar.vue'
 export default {
     name: 'header',
     components:{
         SideBar
+    },
+    methods:{
+        logOutSession(){
+            Auth.logOutSession().then(()=> {
+                this.$router.push('/')
+            }).catch( e => {
+                console.log(e)
+            })
+        }
     }
 }
 </script>

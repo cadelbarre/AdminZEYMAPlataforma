@@ -8,7 +8,7 @@
 <script>
 import moment from 'moment'
 export default {
-    name: 'Footer',
+    name: 'TheFooter',
     methods: {
         getYear() {
             moment.locale('es-mx');        

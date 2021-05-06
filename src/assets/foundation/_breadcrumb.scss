@@ -32,14 +32,14 @@
     padding: 2em !important;
 }
 
-nav.tabs.is-boxed{
+.tabs.is-boxed{
     ul{
         li{
-            a{
+            a span{
                 color: $body !important;
             }
             &.is-active{
-                a{
+                a span{
                     color: $primary !important;
                 }
             }

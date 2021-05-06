@@ -1,14 +1,14 @@
 <template>
     <section>
         <BreadCrumb title="Agregar Pedidos" />
-        
+
         <b-tabs type="is-boxed" class="has-shadow">
             <b-tab-item label="Cliente">
-                <SelectClient />
+                <SelectClient @selectedClient="infoSelected"/>
                 
             </b-tab-item>
-            <b-tab-item label="Orden Pedido">
-                <TableProduct />
+            <b-tab-item label="Orden Pedido" :disabled="isDisabled">
+                <TableProduct :clientSelected="selected == null ? {} : selected"/>
             </b-tab-item>
         </b-tabs>
         <b-tag rounded type="is-dark" size="is-large">Total Pedido: $ 498.524</b-tag>
@@ -24,14 +24,25 @@ export default {
     components: {
         BreadCrumb,
         SelectClient,
-        TableProduct,
-    }
+        TableProduct
+    },
+  data(){
+      return{
+        isDisabled: false,
+        selected: {},
+      }
+  },
+  methods:{
+    infoSelected(info){
+        this.selected = info
+      }
+  }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .tag {
-    position: -webkit-fixed !important;
+    // position: -webkit-fixed !important;
     position: fixed !important;
     bottom: 20px !important;
     right: 0;

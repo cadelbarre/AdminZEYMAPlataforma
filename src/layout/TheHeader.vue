@@ -43,7 +43,7 @@
 import Auth from '@/classes/AuthUser'
 import SideBar from '@/components/Setting/SideBar.vue'
 export default {
-    name: 'header',
+    name: 'TheHeader',
     components:{
         SideBar
     },

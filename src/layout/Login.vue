@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <section class="hero has-text-light is-fullheight">
+        <section class="hero has-background-light is-fullheight">
             <div class="hero-body">
                 <div class="container">
                     <div class="columns is-centered">

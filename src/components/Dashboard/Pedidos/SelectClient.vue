@@ -22,9 +22,7 @@
           >
             <template slot="empty">No hay resultados encontrados.</template>
           </b-autocomplete>
-          <p class="control">
-            <b-button type="is-info" label="Buscar" />
-          </p>
+
         </b-field>
       </div>
     </div>
@@ -48,14 +46,31 @@ export default {
   mounted() {
     this.$refs.selectClient.focus();
   },
+  methods:{
+    handleSelectedClient(){
+      this.$emit('selectedClient', this.selected)
+    }
+  },
   asyncComputed: {
-    ...mapState("clients", ["client_list", "is_loading"]),
+    ...mapState("clients", ["client_list"]),
     getLoading() {
-      return this.is_loading;
+      if (this.client_list == null){
+        return true
+      }else{
+        return false
+      }
+
     },
-    async filteredDataClientsList() {
+    isSelected(){
+      if (Object.keys(this.selected).length !== 0){
+         return this.handleSelectedClient()
+      }else{
+        return this.selected = {}
+      }
+    },
+    filteredDataClientsList() {
       if (this.client_list) {
-        return await this.client_list.filter((option = {}) => {
+        return this.client_list.filter((option = {}) => {
           return (
             option.nombre
               .toString()

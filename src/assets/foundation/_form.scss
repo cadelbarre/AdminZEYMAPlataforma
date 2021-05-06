@@ -22,3 +22,7 @@ input:focus, textarea:focus {
     border-color: $primary !important;
     box-shadow: 0 0 0 0.125em $primary-rgb !important;
 }
+
+input#cantidad.input{
+    height: 2em !important;
+}

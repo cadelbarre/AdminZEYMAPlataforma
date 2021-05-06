@@ -16,7 +16,7 @@ const routes = [
         name: "login",
         component: () =>
           import(
-            /* webpackChunkName: "Bodega" */ "../components/Login/LoginUser.vue"
+            /* webpackChunkName: "login" */ "../components/Login/LoginUser.vue"
           ),
       },
       {
@@ -24,7 +24,7 @@ const routes = [
         name: "register",
         component: () =>
           import(
-            /* webpackChunkName: "about" */ "../components/Login/RegisterUser.vue"
+            /* webpackChunkName: "login" */ "../components/Login/RegisterUser.vue"
           ),
       },
       {
@@ -32,7 +32,7 @@ const routes = [
         name: "resetPassword",
         component: () =>
           import(
-            /* webpackChunkName: "about" */ "../components/Login/ResetPasswordUser.vue"
+            /* webpackChunkName: "login" */ "../components/Login/ResetPasswordUser.vue"
           ),
       },
     ],
@@ -41,7 +41,7 @@ const routes = [
     path: "/dashboard",
     meta: { requiresAuth: true },
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Dashboard.vue"),
+      import(/* webpackChunkName: "dashboard" */ "../views/Dashboard.vue"),
     children: [
       {
         path: "/",
@@ -49,7 +49,7 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "Bodega" */ "../components/Dashboard/Pedidos/AgregarPedido.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/AgregarPedido.vue"
           ),
       },
       {
@@ -58,7 +58,7 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "about" */ "../components/Dashboard/Pedidos/DraftPurchase.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/DraftPurchase.vue"
           ),
       },
       {
@@ -67,7 +67,7 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "about" */ "../components/Dashboard/Pedidos/AdminPurchase.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/AdminPurchase.vue"
           ),
       },
     ],
@@ -75,7 +75,7 @@ const routes = [
   {
     path: "/Cartera",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Cartera.vue"),
+      import(/* webpackChunkName: "cartera" */ "../views/Cartera.vue"),
     children: [
       {
         path: "/",
@@ -83,7 +83,7 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "Bodega" */ "../components/Dashboard/Cartera/IndexDebt.vue"
+            /* webpackChunkName: "cartera" */ "../components/Dashboard/Cartera/IndexDebt.vue"
           ),
       },
     ],
@@ -92,7 +92,7 @@ const routes = [
     path: "/*",
     name: "error",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Error404.vue"),
+      import(/* webpackChunkName: "error" */ "../views/Error404.vue"),
   },
 ];
 

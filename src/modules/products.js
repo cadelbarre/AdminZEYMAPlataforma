@@ -13,8 +13,7 @@ export default {
   },
   actions: {
     async fetchProductList({ commit, state }) {
-      if  (state.product_list.length === 0){
-        console.log('searching...')
+      if (state.product_list.length === 0){
         const db = new RealDB("ListaProductos");
         await db
             .fetchData("nombre1")

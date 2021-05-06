@@ -3,52 +3,108 @@
     <div class="card">
       <div class="card-content">
         <b-field label="Buscador Producto">
-          <b-input ref="searchProduct" placeholder="Buscar por producto ó codigo" type="search" id="Search" v-model="queryName" expanded>
+          <b-input
+            ref="searchProduct"
+            placeholder="Buscar por producto ó codigo"
+            type="search"
+            id="Search"
+            v-model="queryName"
+            expanded
+            autocomplete="off"
+          >
           </b-input>
         </b-field>
         <b-table
-            :data="product_list == null ? [] : filteredDataProductsList"
+          :data="product_list == null ? [] : filteredDataProductsList"
           sticky-header
           striped
           hoverable
-            :loading="isLoading"
-            default-sort="nombre1"
-            default-sort-direction="ASC"
+          paginated
+          :selected.sync="row"
+          per-page="20"
+          :loading="isLoading"
+          default-sort="nombre1"
+          default-sort-direction="ASC"
         >
-          <b-table-column field="codigo" label="Codigo" width="40" sortable v-slot="props">
+          <b-table-column
+            field="codigo"
+            label="Codigo"
+            width="40"
+            sortable
+            v-slot="props"
+          >
             {{ props.row.codigo }}
           </b-table-column>
-          <b-table-column field="nombre1" label="Descripción" width="200" sortable v-slot="props">
+          <b-table-column
+            field="nombre1"
+            label="Descripción"
+            width="200"
+            sortable
+            v-slot="props"
+          >
             {{ props.row.nombre1 }}
           </b-table-column>
-          <b-table-column field="cuatro" label="Precio" width="40" numeric v-slot="props">
+          <b-table-column
+            field="cuatro"
+            label="Precio"
+            width="40"
+            numeric
+            v-slot="props"
+          >
             {{ formatNumber(props.row.cuatro) }}
           </b-table-column>
-          <b-table-column field="descuento" label="Dcto" width="40" numeric sortable v-slot="props">
+          <b-table-column
+            field="descuento"
+            label="Dcto"
+            width="40"
+            numeric
+            sortable
+            v-slot="props"
+          >
             {{ props.row.descuento }}
           </b-table-column>
-          <b-table-column field="iva" label="IVA" width="40" numeric sortable  v-slot="props">
+          <b-table-column
+            field="iva"
+            label="IVA"
+            width="40"
+            numeric
+            sortable
+            v-slot="props"
+          >
             {{ props.row.iva }}
           </b-table-column>
-          <b-table-column field="siete" label="P. Neto" width="40" numeric v-slot="props">
-            {{ formatNumber(props.row.siete) }}
+          <b-table-column
+            label="P. Neto"
+            width="40"
+            numeric
+            v-slot="props"
+          >
+            {{ formatNumber(props.row.cuatro*((100+props.row.iva - props.row.descuento)/100)) }}
           </b-table-column>
-          <b-table-column field="actual" label="Stock" width="40" numeric v-slot="props">
+          <b-table-column
+            field="actual"
+            label="Stock"
+            width="40"
+            numeric
+            v-slot="props"
+          >
             {{ formatNumber(props.row.actual) }}
           </b-table-column>
-          <b-table-column label="Cant." width="40" >
-            <b-input id="cantidad"></b-input>
+          <b-table-column label="Cant." width="40">
+            <b-input></b-input>
           </b-table-column>
           <template #empty>
             <div class="has-text-centered">
-              <p class="subtitle has-text-grey-light has-text-weight-light">No records</p>
+              <p class="subtitle has-text-grey-light has-text-weight-light">
+                No records
+              </p>
             </div>
           </template>
         </b-table>
       </div>
     </div>
-
-    <div class="card">
+      <pre>{{row}}</pre>
+    <!-- <div class="card">
       <div class="card-header">
         <div class="card-header-title px-5 py-4">
           Orden de Compra del Cliente
@@ -68,11 +124,13 @@
         </b-field>
 
       </div>
-    </div>
+    </div> -->
+    
   </section>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import { formattedNumber } from '@/functions/general'
 export default {
   name: "tableProduct",
   props: {
@@ -85,52 +143,41 @@ export default {
   data() {
     return {
       productName: "",
-      queryName: '',
-      isNull: false,
-
+      queryName: "",
+      row: {}
     };
   },
-  async mounted() {
+  async created() {
     await this.fetchProductList();
   },
   methods: {
     ...mapActions("products", ["fetchProductList"]),
-    formatNumber(x = 0) {
-      return x
-          .toString()
-          .replace(/\D/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    },
+    formatNumber(x){
+      return formattedNumber(x)
+    }
   },
   asyncComputed: {
     ...mapState("products", ["product_list"]),
     async filteredDataProductsList() {
-      let name_re = new RegExp(this.queryName, "i"),
-          productFiltered = [],
-           i = 0;
-
-      for (i in this.product_list) {
-
-        if (
-            this.product_list[i].nombre1.match(name_re) ||
-            this.product_list[i].codigo.match(name_re)
-        ) {
-          productFiltered.push(this.product_list[i]);
-        }
+      if (this.product_list) {
+        let name_re = Object.values(this.product_list);
+        return name_re.filter(
+          (x) =>
+            x.nombre1.toLowerCase().indexOf(this.queryName.toLowerCase()) > -1
+        );
+      } else {
+        return [];
       }
-      this.isNull = false
-      return productFiltered;
     },
-    isLoading(){
-      if (!this.product_list){
-        return true
-      }else{
-        return false
+    isLoading() {
+      if (!this.product_list) {
+        return true;
+      } else {
+        return false;
       }
-    }
+    },
   },
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

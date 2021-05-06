@@ -9,7 +9,6 @@
       </header>
       <div class="card-content">
         <b-field label="Seleccionar Cliente">
-          <!-- <b-input ref="selectClient" type="text" placeholder="Ej. 123456 - Drogueria Carlos - Carlos delbarre" expanded></b-input> -->
           <b-autocomplete
             ref="selectClient"
             field="nombre"
@@ -22,7 +21,6 @@
           >
             <template slot="empty">No hay resultados encontrados.</template>
           </b-autocomplete>
-
         </b-field>
       </div>
     </div>
@@ -46,27 +44,24 @@ export default {
   mounted() {
     this.$refs.selectClient.focus();
   },
-  methods:{
-    handleSelectedClient(){
-      this.$emit('selectedClient', this.selected)
-    }
+  methods: {
+    handleSelectedClient() {
+      this.$emit("selectedClient", this.selected);
+    },
   },
   asyncComputed: {
     ...mapState("clients", ["client_list"]),
+    ...mapState("products", ["product_list"]),
     getLoading() {
-      if (this.client_list == null){
-        return true
-      }else{
-        return false
+      if (this.product_list == null) {
+        return true;
+      } else {
+        return false;
       }
-
     },
-    isSelected(){
-      if (Object.keys(this.selected).length !== 0){
-         return this.handleSelectedClient()
-      }else{
-        return this.selected = {}
-      }
+    isSelected() {
+      
+        return this.handleSelectedClient();
     },
     filteredDataClientsList() {
       if (this.client_list) {

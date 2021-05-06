@@ -1,0 +1,76 @@
+/*------------ Media query para smartphone max-width: 767px -------------*/
+@media only screen and (max-width: 767px){
+    body{
+        font-size: 0.8rem !important; 
+    }
+
+    .autocomplete .dropdown-item {
+        white-space: initial !important;
+        font-size: 0.75em !important;
+    }
+
+    .box {
+        padding: 2em 1.5em !important;
+    }
+
+    label{
+        font-size: 1em !important;
+    }
+
+    h1.title{
+        font-size: 2em !important;
+    }
+
+    p.is-size-4 {
+        font-size: 1.5em !important;
+    }
+
+    .card-content {
+        padding: 1em !important;
+    }
+    
+    .hero-body{
+        padding: 3em 1.5em !important; 
+    }
+
+    .tag:not(body) {
+        font-size: 0.75em !important;
+    }
+    #total.tag:not(body) {
+        font-size: 0.8rem !important;
+    }
+
+    section.tab-content {
+        padding: 1rem !important;
+    }
+
+    .column:first-child{
+        padding: 0.9em 0.9em 0em 0.9em !important;
+    }
+
+    .column:not(:first-child){
+        padding: 0em 0.9em !important;
+    }
+
+    .column:last-child{
+        padding: 0em 0.9em 0.9em 0.9em !important;
+    }
+
+    .level-left + .level-right {
+        margin-top: 1em !important;
+    }
+
+
+}
+
+// /*------------ Media query para TABLET (max-width: 768px) and (min-width:1023px) -------------*/
+// @media only screen and (min-width: 768px) and (max-width:1023px){
+//     CSS for tablet
+// }
+
+/*------------ Media query para DESKTOP (min-width: 1024px) and (max-width:1279px) -------------*/
+@media only screen and (min-width: 1024px) and (max-width:1279px){
+    .box {
+        padding: 4em 3em !important;
+    }
+}

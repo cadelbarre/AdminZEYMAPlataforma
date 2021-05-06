@@ -11,7 +11,7 @@
                 <TableProduct :clientSelected="selected == null ? {} : selected"/>
             </b-tab-item>
         </b-tabs>
-        <b-tag rounded type="is-dark" size="is-large">Total Pedido: $ 498.524</b-tag>
+        <b-tag rounded type="is-dark" size="is-large" id="total">Total Pedido: $ 498.524</b-tag> 
     </section>
 </template>
 <script>
@@ -28,13 +28,21 @@ export default {
     },
   data(){
       return{
-        isDisabled: false,
-        selected: {},
+          selected: {},
       }
   },
   methods:{
     infoSelected(info){
         this.selected = info
+      }
+  },
+  asyncComputed:{
+      isDisabled(){
+          if(this.selected){
+              return false
+          }else{
+              return true
+          }
       }
   }
 }

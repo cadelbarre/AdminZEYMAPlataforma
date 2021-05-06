@@ -15,15 +15,18 @@
 
 // ----------------------------
 
-body,
 input,
 optgroup,
 select,
 nav,
-textarea label {
+textarea{
     font-family: $font;
     color: $body !important;
     font-size: 0.93em !important;
+}
+
+body{
+    font-family: $font;
 }
 
 button {

@@ -52,3 +52,7 @@
     border-color: $primary !important;
     color: #fff !important;
 }
+
+.table tr.is-selected {
+    background-color: $primary;
+}

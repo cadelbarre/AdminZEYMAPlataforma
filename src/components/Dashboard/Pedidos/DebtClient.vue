@@ -68,6 +68,7 @@
 import RealDB from "@/classes/DataBase";
 import Toast from "@/classes/Toast";
 import moment from 'moment';
+import { formattedNumber } from '@/functions/general'
 export default {
     name: "DebtClient",
     props: {
@@ -85,10 +86,7 @@ export default {
     },
     methods: {
         formatNumber(x = 0) {
-            return x
-                .toString()
-                .replace(/\D/g, "")
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return formattedNumber(x)
         },
         getInfoDebtClient(x) {
             let dataDebt = Object.values(x);

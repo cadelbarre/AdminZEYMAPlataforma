@@ -13,6 +13,11 @@ export default class Auth {
         return db.signInWithEmailAndPassword(email, password)
     }
 
+    static currentUser(){
+        let db = Firebase.auth()
+        return db.currentUser
+    }
+
     static logOutSession(){
         // this.initializeApp()
         let db = Firebase.auth();

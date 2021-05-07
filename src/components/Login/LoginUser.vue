@@ -61,6 +61,7 @@
 import { mapActions } from "vuex";
 import Auth from "@/classes/AuthUser";
 import Toast from "@/classes/Toast";
+
 export default {
   name: "login",
   data() {
@@ -80,18 +81,19 @@ export default {
   },
   methods: {
     ...mapActions("clients", ["fetchClientsList"]),
+    ...mapActions("user", ["addReqAuth"]),
     async loginIt() {
       let that = this;
       that.isLoading = true;
       this.cleanVariables();
 
       if (this.verifyInput()) {
+        if (await Auth.currentUser()) Auth.logOutSession();
         await Auth.signInUser(this.mail, this.password)
-          .then(async () => {
-            await this.fetchClientsList();
-            this.$router.push("/dashboard");
-            that.isLoading = false;
-          })
+          .then(async () => await this.addReqAuth())
+          .then(async () => await this.fetchClientsList())
+          .then(() => (that.isLoading = false))
+          .then(() => this.$router.push("/dashboard"))
           .catch((e) => {
             Toast.error(`${e.code} - ${e.message}`);
             that.isLoading = false;

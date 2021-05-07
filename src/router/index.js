@@ -1,7 +1,6 @@
 import Vue from "vue";
+import vueStore from '@/store/index'
 import VueRouter from "vue-router";
-
-var ReqAuth = true;
 
 Vue.use(VueRouter);
 
@@ -39,7 +38,6 @@ const routes = [
   },
   {
     path: "/dashboard",
-    meta: { requiresAuth: true },
     component: () =>
       import(/* webpackChunkName: "dashboard" */ "../views/Dashboard.vue"),
     children: [
@@ -104,7 +102,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!ReqAuth) {
+    if (!vueStore.getters['user/isUserLoggedIn']) {
       next({
         name: "login",
       });

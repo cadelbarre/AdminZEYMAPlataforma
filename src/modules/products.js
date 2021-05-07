@@ -21,7 +21,7 @@ export default {
               await commit("SET_PRODUCT_LIST", res.val());
             })
             .catch((e) => {
-              Toast.errorCode(`${e.code} - ${e.message}`);
+              Toast.error(`${e.code} - ${e.message}`);
             });
       }
     },

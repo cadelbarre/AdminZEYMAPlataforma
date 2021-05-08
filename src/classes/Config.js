@@ -1,6 +1,5 @@
 import Firebase from "firebase/app";
-import VueRouter from "@/router/index";
-import VueStore from "@/store/index";
+import 'firebase/auth'
 
 const Config = {
   apiKey: "AIzaSyDt8WB_f3rzVyVvFA1VVnwsXBW0fzuUcUA",
@@ -15,15 +14,12 @@ const Config = {
 
 if (!Firebase.apps.length) Firebase.initializeApp(Config);
 
-Firebase.auth().onAuthStateChanged( user => {
-	if (user) {
-		VueStore.dispatch('user/addReqAuth');
-		VueStore.dispatch('clients/fetchClientsList');
-		VueRouter.push('/dashboard')
-	} else {
-		console.error("no login");
-	}
-});
-console.log(VueStore.getters['user/isUserLoggedIn'])
+Firebase.getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    Firebase.auth().onAuthStateChanged((user) => {
+      resolve(user);
+    }, reject);
+  });
+};
 
 export default Firebase;

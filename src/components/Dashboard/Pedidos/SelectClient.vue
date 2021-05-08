@@ -13,6 +13,7 @@
             ref="selectClient"
             field="nombre"
             v-model="clientName"
+            open-on-focus
             :data="filteredDataClientsList"
             expanded
             placeholder="Ej. 123456 - Drogueria Carlos - Carlos delbarre"

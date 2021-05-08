@@ -20,6 +20,7 @@
           striped
           hoverable
           paginated
+          open-on-focus
           :selected.sync="row"
           per-page="20"
           :loading="isLoading"
@@ -44,14 +45,8 @@
           >
             {{ props.row.nombre1 }}
           </b-table-column>
-          <b-table-column
-            field="cuatro"
-            label="Precio"
-            width="40"
-            numeric
-            v-slot="props"
-          >
-            {{ formatNumber(props.row.cuatro) }}
+          <b-table-column label="Precio" width="40" numeric v-slot="props">
+            {{ formatNumber(props.row[getPrice()]) }}
           </b-table-column>
           <b-table-column
             field="descuento"
@@ -73,13 +68,13 @@
           >
             {{ props.row.iva }}
           </b-table-column>
-          <b-table-column
-            label="P. Neto"
-            width="40"
-            numeric
-            v-slot="props"
-          >
-            {{ formatNumber(props.row.cuatro*((100+props.row.iva - props.row.descuento)/100)) }}
+          <b-table-column label="P. Neto" width="40" numeric v-slot="props">
+            {{
+              formatNumber(
+                props.row.cuatro *
+                  ((100 + props.row.iva - props.row.descuento) / 100)
+              )
+            }}
           </b-table-column>
           <b-table-column
             field="actual"
@@ -93,6 +88,7 @@
           <b-table-column label="Cant." width="40">
             <b-input></b-input>
           </b-table-column>
+
           <template #empty>
             <div class="has-text-centered">
               <p class="subtitle has-text-grey-light has-text-weight-light">
@@ -103,7 +99,7 @@
         </b-table>
       </div>
     </div>
-      <pre>{{row}}</pre>
+
     <!-- <div class="card">
       <div class="card-header">
         <div class="card-header-title px-5 py-4">
@@ -125,12 +121,11 @@
 
       </div>
     </div> -->
-    
   </section>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
-import { formattedNumber } from '@/functions/general'
+import { formattedNumber } from "@/functions/general";
 export default {
   name: "tableProduct",
   props: {
@@ -144,7 +139,7 @@ export default {
     return {
       productName: "",
       queryName: "",
-      row: {}
+      row: {},
     };
   },
   async created() {
@@ -152,9 +147,13 @@ export default {
   },
   methods: {
     ...mapActions("products", ["fetchProductList"]),
-    formatNumber(x){
-      return formattedNumber(x)
-    }
+    formatNumber(x) {
+      return formattedNumber(x);
+    },
+    getPrice() {
+      let arr = ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete"];
+      return arr[this.clientSelected.listapre - 1];
+    },
   },
   asyncComputed: {
     ...mapState("products", ["product_list"]),

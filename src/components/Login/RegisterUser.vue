@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box p-6">
         <div class="has-text-centered mb-4">
             <h1 class="title mb-3">Solicitud de Registro</h1>
             <p>Registarse solo le tomará unos minutos</p>

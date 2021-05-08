@@ -1,33 +1,24 @@
 import Firebase from "firebase/app";
 import "firebase/auth";
-// import Config from "./Config";
 
 export default class Auth {
-    // static initializeApp() {
-    //     if (!Firebase.apps.length) Firebase.initializeApp(Config);
-    // }
+  static signInUser(email, password) {
+    let db = Firebase.auth();
+    return db.signInWithEmailAndPassword(email, password);
+  }
 
-    static signInUser(email, password) {
-        // this.initializeApp()
-        let db = Firebase.auth();
-        return db.signInWithEmailAndPassword(email, password)
-    }
+  static currentUser() {
+    let db = Firebase.auth();
+    return db.currentUser;
+  }
 
-    static currentUser(){
-        let db = Firebase.auth()
-        return db.currentUser
-    }
+  static logOutSession() {
+    let db = Firebase.auth();
+    return db.signOut();
+  }
 
-    static logOutSession(){
-        // this.initializeApp()
-        let db = Firebase.auth();
-        return db.signOut()
-    }
-
-    static recoveryPassword(email) {
-        // this.initializeApp()
-        var auth = Firebase.auth();
-        return auth.sendPasswordResetEmail(email)
-    }
-
+  static recoveryPassword(email) {
+    var auth = Firebase.auth();
+    return auth.sendPasswordResetEmail(email);
+  }
 }

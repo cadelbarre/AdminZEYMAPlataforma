@@ -59,7 +59,6 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import axios from 'axios';
 import Auth from "@/classes/AuthUser";
 import Toast from "@/classes/Toast";
 
@@ -79,12 +78,6 @@ export default {
   mounted() {
     this.$store.commit("SET_LAYOUT", "login-layout");
     this.$refs.userLogin.focus();
-    
-      axios.get('../../php/index.php')
-      .then( x => console.log(x))
-      .catch( e => console.error(e))
-
-
   },
   methods: {
     ...mapActions("clients", ["fetchClientsList"]),

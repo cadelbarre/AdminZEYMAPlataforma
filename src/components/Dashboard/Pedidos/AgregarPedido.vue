@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       selected: {},
+      isDisabled: false,
     };
   },
   methods: {
@@ -38,10 +39,7 @@ export default {
     },
   },
   asyncComputed: {
-    isDisabled() {
-      if (!this.selected) return true;
-      return false;
-    },
+    
   },
 };
 </script>

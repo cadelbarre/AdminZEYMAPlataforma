@@ -3,9 +3,7 @@
     <b-loading is-full-page v-model="getLoading" :can-cancel="true"></b-loading>
     <div class="card">
       <header class="card-header">
-        <p class="card-header-title px-5 py-4">
-          Gestión de Cliente
-        </p>
+        <p class="card-header-title px-5 py-4">Gestión de Cliente</p>
       </header>
       <div class="card-content">
         <b-field label="Seleccionar Cliente">
@@ -29,8 +27,13 @@
   </section>
 </template>
 <script>
-import { mapState } from "vuex";
+import Auth from '@/classes/AuthUser'
+import RealDB from '@/classes/DataBase'
+import Toast from '@/classes/Toast'
+import moment from "moment";
+import { mapState, mapActions } from "vuex";
 import DebtClient from "./DebtClient.vue";
+
 export default {
   name: "selectClient",
   components: {
@@ -39,20 +42,52 @@ export default {
   data() {
     return {
       clientName: "",
-      selected: {},
+      selected: null,
     };
   },
   mounted() {
     this.$refs.selectClient.focus();
   },
   methods: {
+    ...mapActions("products", ["getNOrder"]),
     handleSelectedClient() {
       this.$emit("selectedClient", this.selected);
+      this.saveClientInfo(this.selected)
+    },
+    async saveClientInfo(value) {
+      
+      await this.getNOrder();
+      if (value == null) return
+
+      moment.locale("es-mx");
+      let clientInfo = {
+        codigo: value.codigo,
+        nombre: value.nombre,
+        listapre: value.listapre,
+        contacto: value.contacto,
+        nit: value.nit,
+        direccion: value.direccion,
+        Norder: this.n_order,
+        user: Auth.currentUser().email,
+        fecha: moment().format("L"),
+        hora: moment().format("LTS"),
+        modificado: null,
+        aplicado: false,
+        estado: "pendiente",
+      };
+
+      let db = new RealDB(`KardexPedidos/${this.n_order}`);
+
+      try {
+        db.update(clientInfo);
+      } catch (e) {
+        Toast.error(`${e.code} - ${e.message}`);
+      }
     },
   },
   asyncComputed: {
     ...mapState("clients", ["client_list"]),
-    ...mapState("products", ["product_list"]),
+    ...mapState("products", ["product_list", 'n_order']),
     getLoading() {
       if (this.product_list == null) {
         return true;
@@ -61,8 +96,7 @@ export default {
       }
     },
     isSelected() {
-      
-        return this.handleSelectedClient();
+      if (this.selected !== null) return this.handleSelectedClient();
     },
     filteredDataClientsList() {
       if (this.client_list) {

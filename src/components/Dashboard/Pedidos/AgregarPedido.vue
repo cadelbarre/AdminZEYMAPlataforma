@@ -6,7 +6,7 @@
       <b-tab-item label="Cliente">
         <SelectClient @selectedClient="infoSelected" />
       </b-tab-item>
-      <b-tab-item label="Orden Pedido" :disabled="isDisabled">
+      <b-tab-item label="Orden Pedido">
         <TableProduct :clientSelected="selected == null ? {} : selected" />
       </b-tab-item>
     </b-tabs>
@@ -29,17 +29,13 @@ export default {
   },
   data() {
     return {
-      selected: {},
-      isDisabled: false,
+      selected: null,
     };
   },
   methods: {
     infoSelected(info) {
       this.selected = info;
     },
-  },
-  asyncComputed: {
-    
   },
 };
 </script>

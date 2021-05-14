@@ -107,17 +107,17 @@
       </div>
     </div>
 
-    <Draft :order="sendNorder"/>
+    <Draft />
   </section>
 </template>
 <script>
 import RealDB from "@/classes/DataBase";
-import Auth from "@/classes/AuthUser";
-import Draft from './DraftTableProduct'
-import moment from "moment";
+import Draft from "./DraftTableProduct";
 import Toast from "@/classes/Toast";
+
 import { mapActions, mapState } from "vuex";
 import { formattedNumber } from "@/functions/general";
+
 export default {
   name: "tableProduct",
   props: {
@@ -128,7 +128,7 @@ export default {
     },
   },
   components: {
-    Draft
+    Draft,
   },
   data() {
     return {
@@ -136,12 +136,10 @@ export default {
       queryName: "",
       row: null,
       cantidad: 0,
-      Norder: 0,
     };
   },
   async created() {
     await this.fetchProductList();
-    this.getNOrderSales();
   },
   methods: {
     ...mapActions("products", ["fetchProductList"]),
@@ -152,26 +150,7 @@ export default {
       let arr = ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete"];
       return arr[this.clientSelected.listapre - 1];
     },
-    async getNOrderSales() {
-      let that = this;
-      let db = new RealDB("KardexPedidos/");
-      await db.limitLast(1)
-        .once("value")
-        .then((response) => {
-          response.val() == null
-            ? (that.Norder = 1)
-            : (that.Norder = this.keyValue(response.val()) + 1);
-        })
-        .catch((e) => {
-          Toast.error(`${e.code} - ${e.message}`);
-        });
-    },
-    keyValue(x) {
-      if (!x) return 1;
-      else return parseInt(Object.keys(x));
-    },
     setOrderSales(e) {
-      this.saveClientInfo();
       if (e.target.value > 0) {
         let productos = {
           item: e.target.id,
@@ -190,47 +169,24 @@ export default {
           ((100 + productos.iva - productos.descuento) / 100);
 
         e.target.value = 0;
-        document.getElementById("");
 
         let db = new RealDB(
-          `KardexPedidos/${this.Norder}/productos/${e.target.id}`
+          `KardexPedidos/${this.n_order}/productos/${e.target.id}`
         );
-        db.update(productos).catch((e) =>
-          Toast.error(`${e.code} - ${e.message}`)
-        );
+
+        try {
+          db.update(productos);
+        } catch (e) {
+          Toast.error(`${e.code} - ${e.message}`);
+        }
       }
     },
-    async saveClientInfo() {
-      moment.locale("es-mx");
-      let clientInfo = {
-        codigo: this.clientSelected.codigo,
-        nombre: this.clientSelected.nombre,
-        listapre: this.clientSelected.listapre,
-        contacto: this.clientSelected.contacto,
-        nit: this.clientSelected.nit,
-        direccion: this.clientSelected.direccion,
-        Norder: this.Norder,
-        user: Auth.currentUser().email,
-        fecha: moment().format("L"),
-        hora: moment().format("LTS"),
-        modificado: null,
-        aplicado: false,
-        estado: 'pendiente'
-      };
-
-      let db = new RealDB(`KardexPedidos/${this.Norder}`);
-      await db.update(clientInfo).catch((e) =>
-        Toast.error(`${e.code} - ${e.message}`)
-      );
-      this.sendNorder()
-
+    sendNorder() {
+      return this.Norder;
     },
-    sendNorder(){
-      return this.Norder
-    }
   },
   asyncComputed: {
-    ...mapState("products", ["product_list"]),
+    ...mapState("products", ["product_list", "n_order"]),
     async filteredDataProductsList() {
       if (this.queryName) {
         let name_re = Object.values(this.product_list);
@@ -248,7 +204,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
 };
 </script>

@@ -8,9 +8,9 @@
             </div>
             <div class="level-right">
                 <div class="level-item">
-                    <div class="buttons">
-                        <b-button label="Informe Pedidos"></b-button>
-                        <b-button label="Exportar Excel" type="is-info"></b-button>
+                    <div class="buttons" v-if="n_order > 0">
+                        <b-button label="Generar Pedido" type="is-info" icon-left="email-send-outline"></b-button>
+                        <b-button label="Exportar Excel" icon-left="microsoft-excel"></b-button>
                     </div>
                 </div>
             </div>
@@ -18,6 +18,7 @@
     </section>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
     name: 'breadCrumb',
     props: {
@@ -26,7 +27,10 @@ export default {
             required: true,
             default: ''
         },
-    }
+    },
+    computed: {
+        ...mapState('products',['n_order'])
+    },
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

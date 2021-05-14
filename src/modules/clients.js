@@ -13,18 +13,16 @@ export default {
   },
   actions: {
     async fetchClientsList({ commit, state }) {
-      if (state.client_list.length === 0){
+      if (state.client_list.length === 0) {
         const db = new RealDB("ListaClientes");
-        await db
-            .fetchData("nombre")
-            .then(async (res) => {
-              commit("SET_CLIENT_LIST", res.val());
-            })
-            .catch((e) => {
-              Toast.errorCode(`${e.code} - ${e.message}`);
-            });
+        try {
+          await db.fetchData("nombre").then(async (res) => {
+            commit("SET_CLIENT_LIST", res.val());
+          });
+        } catch (e) {
+          Toast.error(`${e.code} - ${e.message}`);
+        }
       }
-
     },
   },
   getters: {},

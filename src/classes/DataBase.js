@@ -20,12 +20,19 @@ export default class RealDataBase {
         let db = Firebase.database()
         return db.ref(this.refs).once('value')
     }
-
-    update(data) {
-        return Firebase.database().ref(this.refs).update(data)
+    
+    getInfoRealTime(){
+        let db = Firebase.database()
+        return db.ref(this.refs)
     }
-
+    
+    update(data) {
+        let db = Firebase.database()
+        return db.ref(this.refs).update(data)
+    }
+    
     limitLast(limit) {
-        return Firebase.database().ref(this.refs).limitToLast(limit)
+        let db = Firebase.database()
+        return db.ref(this.refs).limitToLast(limit)
     }
 }

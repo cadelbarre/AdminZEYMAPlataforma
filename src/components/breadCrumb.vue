@@ -18,6 +18,7 @@
     </section>
 </template>
 <script>
+    import RealDB from '@/classes/DataBase'
 import { mapState } from "vuex";
 export default {
     name: 'breadCrumb',
@@ -27,6 +28,11 @@ export default {
             required: true,
             default: ''
         },
+    },
+    methods:{
+        generarPedido(){
+
+        }
     },
     computed: {
         ...mapState('products',['n_order'])

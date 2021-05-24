@@ -32,7 +32,7 @@ import RealDB from '@/classes/DataBase'
 import Toast from '@/classes/Toast'
 import moment from "moment";
 import { mapState, mapActions } from "vuex";
-import DebtClient from "./DebtClient.vue";
+import DebtClient from "./PedidoSelectClientDebt.vue";
 
 export default {
   name: "selectClient",
@@ -74,6 +74,7 @@ export default {
         modificado: null,
         aplicado: false,
         estado: "pendiente",
+        observación: ''
       };
 
       let db = new RealDB(`KardexPedidos/${this.n_order}`);

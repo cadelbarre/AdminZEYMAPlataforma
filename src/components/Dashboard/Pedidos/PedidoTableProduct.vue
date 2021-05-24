@@ -14,8 +14,6 @@
           >
           </b-input>
         </b-field>
-        <!-- sticky-header
-          open-on-focus -->
         <b-table
           :data="product_list == null ? [] : filteredDataProductsList"
           striped
@@ -112,7 +110,7 @@
 </template>
 <script>
 import RealDB from "@/classes/DataBase";
-import Draft from "./DraftTableProduct";
+import Draft from "./PedidoTableProductDraftTable.vue";
 import Toast from "@/classes/Toast";
 
 import { mapActions, mapState } from "vuex";
@@ -143,7 +141,7 @@ export default {
   },
   methods: {
     ...mapActions("products", ["fetchProductList"]),
-    formatNumber(x) {
+    formatNumber(x = 0) {
       return formattedNumber(x);
     },
     getPrice() {
@@ -152,6 +150,21 @@ export default {
     },
     setOrderSales(e) {
       if (e.target.value > 0) {
+
+        if (this.row.actual - e.target.value < 0) {
+          e.target.value = 0
+          return this.$buefy.dialog.alert({
+                    title: 'Error',
+                    message: 'La cantidad solicitada es superior al inventario disponible. ',
+                    type: 'is-danger',
+                    hasIcon: true,
+                    icon: 'alert-circle',
+                    ariaRole: 'alertdialog',
+                    ariaModal: true
+                })
+        }
+
+
         let productos = {
           item: e.target.id,
           cantidad: Number(e.target.value),
@@ -209,4 +222,8 @@ export default {
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .dialog .modal-card .modal-card-foot .button {
+    display: inline-flex !important;
+  }
+</style>

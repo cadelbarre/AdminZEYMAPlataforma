@@ -8,14 +8,14 @@
 }
 
 .card {
-  border: 1px solid rgba(122, 122, 122, 0.5) !important;
+  border: 1px solid rgba(122, 122, 122, 0.4) !important;
   box-shadow: none !important;
   margin-top: 0.8em !important;
 }
 
 .card-header {
   box-shadow: none !important;
-  border-bottom: 1px solid rgba(122, 122, 122, 0.5) !important;
+  border-bottom: 1px solid rgba(122, 122, 122, 0.4) !important;
 }
 
 .card-header-title {
@@ -26,9 +26,9 @@
 
 .tab-content {
   background-color: #ffffff;
-  border-left: 1px solid $border !important;
-  border-right: 1px solid $border !important;
-  border-bottom: 1px solid $border !important;
+  border-left: 1px solid rgba(122, 122, 122, 0.4) !important;
+  border-right: 1px solid rgba(122, 122, 122, 0.4) !important;
+  border-bottom: 1px solid rgba(122, 122, 122, 0.4) !important;
   padding: 2em !important;
 }
 

@@ -47,25 +47,25 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/AgregarPedido.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/Pedido.vue"
           ),
       },
       {
-        path: "/pedidosBorrador",
-        name: "draftPurchase",
+        path: "/pedidos-borrador",
+        name: "BorradorPedidos",
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/DraftPurchase.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/BorradorPedidos.vue"
           ),
       },
       {
-        path: "/administrarPedidos",
-        name: "adminPurchase",
+        path: "/administrar-Pedidos",
+        name: "AdminPedido",
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/AdminPurchase.vue"
+            /* webpackChunkName: "dashboard" */ "../components/Dashboard/Pedidos/AdminPedido.vue"
           ),
       },
     ],
@@ -81,7 +81,7 @@ const routes = [
         meta: { requiresAuth: true },
         component: () =>
           import(
-            /* webpackChunkName: "cartera" */ "../components/Dashboard/Cartera/IndexDebt.vue"
+            /* webpackChunkName: "cartera" */ "../components/Dashboard/Cartera/Cartera.vue"
           ),
       },
     ],

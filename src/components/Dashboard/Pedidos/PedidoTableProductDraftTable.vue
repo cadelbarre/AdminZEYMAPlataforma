@@ -39,7 +39,7 @@
             width="40"
             v-slot="props"
           >
-            {{ props.row.precioValor }}
+            {{ formatNumber(props.row.precioValor) }}
           </b-table-column>
           <b-table-column
             field="iva"
@@ -63,7 +63,7 @@
             width="40"
             v-slot="props"
           >
-            {{ props.row.valorTotal }}
+            {{ formatNumber(props.row.valorTotal) }}
           </b-table-column>
           <b-table-column
             field="cantidad"
@@ -74,6 +74,16 @@
           >
             {{ props.row.cantidad }}
           </b-table-column>
+          <b-table-column width="100" label="Acciones" centered>
+                        <div class="buttons">
+                            <b-tooltip label="Borrar Pedido" position="is-left" type="is-danger is-light">
+                                <b-button type="is-danger" icon-left="delete" />
+                            </b-tooltip>
+                            <b-tooltip label="Editar Pedido" position="is-right" type="is-dark">
+                                <b-button type="is-info" icon-left="square-edit-outline" />
+                            </b-tooltip>
+                        </div>
+                    </b-table-column>
         </b-table>
         <b-field label="Observación">
           <b-input
@@ -91,6 +101,7 @@
 import RealDB from "@/classes/DataBase";
 import Toast from "@/classes/Toast";
 import { mapState } from "vuex";
+import { formattedNumber } from "@/functions/general";
 
 export default {
   name: "borradorTablaProductos",
@@ -100,7 +111,11 @@ export default {
       observation: ""
     }
   },
-  methods: {},
+  methods: {
+    formatNumber(x) {
+      return formattedNumber(x);
+    },
+  },
   asyncComputed: {
     ...mapState("products", ["n_order"]),
     async getDraft() {
@@ -109,7 +124,8 @@ export default {
       let db = new RealDB(`KardexPedidos/${this.n_order}`);
       try {
         await db.getInfoRealTime().on('value', res => {
-          that.draft = Object.values(res.val().productos)
+          const productos = res.val().productos
+          if( productos !== undefined ) that.draft = Object.values(productos)
         })        
       } catch (e) {
         Toast.error(`${e.code} - ${e.message}`);
@@ -119,4 +135,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scope lang="scss">
+.buttons {
+    justify-content: center !important;
+
+    .button {
+        margin-right: 0.3em;
+    }
+}
+
+.button {
+    padding: 1.2em !important;
+}
+</style>

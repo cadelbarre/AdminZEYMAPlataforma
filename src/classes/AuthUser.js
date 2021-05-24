@@ -14,7 +14,7 @@ export default class Auth {
 
   static logOutSession() {
     let db = Firebase.auth();
-    return db.signOut();
+     return db.signOut();
   }
 
   static recoveryPassword(email) {

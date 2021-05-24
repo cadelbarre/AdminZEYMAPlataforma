@@ -164,7 +164,7 @@ export default {
     };
   },
   mounted() {
-    //this.$refs.selectClientDebt.focus()
+    this.$refs.selectClientDebt.focus()
   },
   methods: {
     formatNumber(x = 0) {
@@ -190,10 +190,10 @@ export default {
       if (this.selected) {
         this.isLoading = true;
         let db = new RealDB("MaesFact"),
-          that = this;
+            that = this;
         return await db
           .orderByEqual("nombre", this.selected.nombre)
-          .then((res) => (that.dataDebt = Object.values(res.val())))
+          .then((res) => res.val() == null ? [] : that.dataDebt = Object.values(res.val()))
           .then((that.isLoading = false));
       } else {
         return (this.dataDebt = []);
@@ -215,15 +215,15 @@ export default {
     },
     sumDebtFooter(){
       if (this.dataDebt) {
-        let reducer = (acc, el) =>{
+
+        let reducer = (acc, el) => {
           acc['totalNeto'] += el.neto,
           acc['totalAbono'] += el.abono,
           acc['totalSaldo'] += el.neto - el.abono
-
           return acc
         }
-
         return this.dataDebt.reduce(reducer, {'totalNeto':0, 'totalAbono': 0, 'totalSaldo':0})
+        
       } else { 
         return []
       }

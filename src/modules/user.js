@@ -10,12 +10,12 @@ export default {
   },
   actions: {
     addReqAuth({ commit }) {
-      let add = true;
-      commit("SET_REQ_AUTH", add);
+      let auth = true;
+      commit("SET_REQ_AUTH", auth);
     },
     removeReqAuth({ commit }) {
-      let remove = false;
-      commit("SET_REQ_AUTH", remove);
+      let auth = false;
+      commit("SET_REQ_AUTH", auth);
     },
   },
   getters: {

@@ -11,14 +11,17 @@
       </b-tab-item>
     </b-tabs>
     <b-tag rounded type="is-dark" size="is-large" id="total"
-      >Total Pedido: $ 498.524</b-tag
+      >Total Pedido: $ {{formatNumber(total)}}</b-tag
     >
   </section>
 </template>
 <script>
 import BreadCrumb from "../../breadCrumb.vue";
-import SelectClient from "./SelectClient.vue";
-import TableProduct from "./TableProduct.vue";
+import SelectClient from "./PedidoSelectClient.vue";
+import TableProduct from "./PedidoTableProduct.vue";
+import RealDB from "@/classes/DataBase";
+import { formattedNumber } from "@/functions/general";
+import {mapState} from 'vuex'
 
 export default {
   name: "agregarPedido",
@@ -30,13 +33,32 @@ export default {
   data() {
     return {
       selected: null,
+      total: 0
     };
   },
   methods: {
     infoSelected(info) {
       this.selected = info;
     },
+    formatNumber(x = 0) {
+      return formattedNumber(x);
+    },
   },
+  asyncComputed:{
+     ...mapState("products", ["n_order"]),
+     async getTotal(){
+      const db = new RealDB(`KardexPedidos/${this.n_order}/productos`)
+      try{
+        await db.getInfoRealTime().on('value', res => {
+          if (res.val() == null ) return this.total = 0
+            const totalSales = Object.values(res.val());
+            return this.total = totalSales.reduce((acc, el) => (acc += el.valorTotal), 0);
+        })
+      }catch(e){
+        console.error(e);
+      }
+     }
+  }
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

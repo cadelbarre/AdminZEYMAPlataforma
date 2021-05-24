@@ -13,10 +13,20 @@ Vue.use(AsyncComputed);
 import Firebase from '@/classes/Config'
 Vue.use(Firebase)
 
+import IdleVue from 'idle-vue'
+const eventsHub = new Vue();
+Vue.use(IdleVue,
+{
+  eventEmitter: eventsHub,
+  store,
+  idleTime: 3000, // 3 seconds
+  startAtIdle: false
+})
+
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

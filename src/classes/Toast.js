@@ -2,8 +2,6 @@ import { ToastProgrammatic as toast } from 'buefy'
 
 export default class Toast {
 
-    
-
     static error(message) {
         toast.open({
             message: message,

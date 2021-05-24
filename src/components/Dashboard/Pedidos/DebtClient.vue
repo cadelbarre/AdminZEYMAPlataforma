@@ -106,7 +106,7 @@ export default {
             let reducer = (acc, el) => {
                 if (today.diff(moment(el.vence, 'DDMMYYYY'), 'days') > 0) {
                     acc['count'] += 1,
-                    acc['debts'] += el.neto
+                        acc['debts'] += el.neto
                 }
 
                 return acc

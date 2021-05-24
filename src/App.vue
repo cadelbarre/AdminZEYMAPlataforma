@@ -2,6 +2,7 @@
   <section>
     <b-loading is-full-page v-model="isLoading"></b-loading>
     <component :is="layout"></component>
+    <pre>{{isIdle}}</pre>
   </section>
 </template>
 <script>
@@ -23,6 +24,11 @@ export default {
     return {
       isLoading: false,
     };
+  },
+  computed:{
+    isIdle() {
+      return this.$store.state.idleVue.isIdle;
+    }
   },
   asyncComputed: {
     ...mapState(["layout"]),

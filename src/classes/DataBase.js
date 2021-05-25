@@ -35,4 +35,9 @@ export default class RealDataBase {
         let db = Firebase.database()
         return db.ref(this.refs).limitToLast(limit)
     }
+
+    remove(){
+        let db = Firebase.database()
+        return db.ref(this.refs).remove()
+    }
 }

@@ -9,7 +9,6 @@
         <p class="has-text-justified mb-5">
             Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.
         </p>
-        <!-- :type="email != null ? 'is-danger' : ''" -->
         <b-field grouped group-multiline position="is-centered">
             <b-input type="email" ref="resetPass" placeholder="Ingrese su correo electrónico." expanded v-model="email"></b-input>
             <p class="control">
@@ -39,25 +38,25 @@ export default {
         this.$refs.resetPass.focus()
     },
     methods: {
-        async recoveryPassword(email) {
+        async recoveryPassword( email ) {
             let that = this
             that.isLoading = true
-            if (email) {
-                await Auth.recoveryPassword(email).then(function() {
-                    console.log('this');
-                    Snackbar.open({
+            if ( email ) {
+                await Auth.recoveryPassword( email ).then( function() {
+                    console.log( 'this' );
+                    Snackbar.open( {
                         message: 'Se envió un correo electrónico para reestablecer su contraseña.',
                         position: 'is-top'
-                    })
+                    } )
                     that.email = null
                     that.isLoading = false
-                }).catch(function(e) {
-                    Toast.error(`${e.code} - ${e.message}`)
+                } ).catch( function( e ) {
+                    Toast.error( `${e.code} - ${e.message}` )
                     that.isLoading = false
                     that.$refs.resetPass.focus()
-                })
+                } )
             } else {
-                Toast.error(`Debe ingresar un correo electrónico valido.`)
+                Toast.error( `Debe ingresar un correo electrónico valido.` )
             }
         }
     }

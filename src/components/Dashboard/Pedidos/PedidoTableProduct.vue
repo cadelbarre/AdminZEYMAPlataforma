@@ -87,35 +87,25 @@ export default {
         formatNumber( x = 0 ) {
             return formattedNumber( x );
         },
-        getPrice() {
-            let arr = [ "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete" ];
-            return arr[ this.clientSelected.listapre - 1 ];
-        },
-        setOrderSales( e ) {
+        async setOrderSales( e ) {
             if ( e.target.value > 0 ) {
+                const product = await this.getItemProducto( e.target.id )
+                const item = product.val()
 
-                if ( this.row.actual - e.target.value < 0 ) {
+                if ( !this.isCorrectCantidad( e.target.value, item.actual ) ) {
                     e.target.value = 0
-                    return this.$buefy.dialog.alert( {
-                        title: 'Error',
-                        message: 'La cantidad solicitada es superior al inventario disponible. ',
-                        type: 'is-danger',
-                        hasIcon: true,
-                        icon: 'alert-circle',
-                        ariaRole: 'alertdialog',
-                        ariaModal: true
-                    } )
+                    return
                 }
 
                 let productos = {
                     item: e.target.id,
                     cantidad: Number( e.target.value ),
-                    nombre: this.row.nombre1,
-                    descuento: this.row.descuento,
-                    iva: this.row.iva,
-                    proveedor: this.row.proveedor,
+                    nombre: item.nombre1,
+                    descuento: item.descuento,
+                    iva: item.iva,
+                    proveedor: item.proveedor,
                     precio: this.getPrice(),
-                    precioValor: this.row[ `${this.getPrice()}` ],
+                    precioValor: item[ `${this.getPrice()}` ],
                 };
 
                 productos[ "valorTotal" ] =
@@ -123,18 +113,48 @@ export default {
                     productos.cantidad *
                     ( ( 100 + productos.iva - productos.descuento ) / 100 );
 
-                e.target.value = 0;
+                e.target.value = '';
 
+                const Norder = this.n_order
                 let db = new RealDB(
-                    `KardexPedidos/${this.n_order}/productos/${e.target.id}`
+                    `KardexPedidos/${Norder}/productos/${e.target.id}`
                 );
 
                 try {
-                    db.update( productos );
+                    await db.update( productos );
                 } catch ( e ) {
-                    Toast.error( `${e}` );
+                    Toast.error( e );
                 }
             }
+        },
+        isCorrectCantidad( cant, stock ) {
+            if ( stock - cant < 0 ) {
+                this.$buefy.dialog.alert( {
+                    title: 'Error',
+                    message: 'La cantidad solicitada es superior al inventario disponible. ',
+                    type: 'is-danger',
+                    hasIcon: true,
+                    icon: 'alert-circle',
+                    ariaRole: 'alertdialog',
+                    ariaModal: true
+                } )
+                return false
+            } else return true
+        },
+        async getItemProducto( value ) {
+            let db = new RealDB(
+                `ListaProductos/${value}`
+            );
+
+            try {
+                return await db.getInfo();
+            } catch ( e ) {
+                return Toast.error( e );
+            }
+        },
+        getPrice() {
+            let arr = [ "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete" ];
+            return arr[ this.clientSelected.listapre - 1 ];
         },
         sendNorder() {
             return this.Norder;

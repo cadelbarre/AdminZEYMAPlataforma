@@ -6,7 +6,7 @@
                     <p class="card-header-title px-5 py-4">Listado Productos</p>
                 </header>
                 <div class="card-content">
-                    <b-table :data="productos == null ? [] : productos" striped hoverable paginated per-page="20" default-sort="nombre" default-sort-direction="ASC">
+                    <b-table :data="productos == null ? [] : productos" striped hoverable paginated per-page="10" default-sort="nombre" default-sort-direction="ASC">
                         <b-table-column field="item" label="Codigo" width="40" centered sortable v-slot="props">
                             {{ props.row.item }}
                         </b-table-column>

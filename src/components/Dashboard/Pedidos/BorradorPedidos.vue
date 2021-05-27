@@ -9,9 +9,9 @@
             </header>
             <div class="card-content">
                 <b-field label="Buscador" message="Puede buscar por nombre del cliente, usuario ó por número de pedido.">
-                    <b-input ref="draftInput" placeholder="Puede buscar por nombre del cliente, usuario ó por número de pedido." type="text"></b-input>
+                    <b-input ref="draftInput" placeholder="Puede buscar por nombre del cliente, usuario ó por número de pedido." type="text" v-model="buscarPedido"></b-input>
                 </b-field>
-                <b-table :data="pendingOrder == null ? [] : pendingOrder" striped hoverable paginated per-page="20" default-sort="Norder" default-sort-direction="DESC" :selected.sync="selected" :loading="isLoading">
+                <b-table :data="pendingOrder == null ? [] : filteredListaPedido" striped hoverable paginated per-page="20" default-sort="Norder" default-sort-direction="DESC" :selected.sync="selected" :loading="isLoading">
                     <b-table-column field="Norder" label="Pedido" width="40" centered sortable v-slot="props">
                         {{ props.row.Norder }}
                     </b-table-column>
@@ -68,6 +68,7 @@ export default {
             selected: null,
             isModalActive: false,
             isLoading: false,
+            buscarPedido: '',
             productos: []
         };
     },
@@ -87,7 +88,7 @@ export default {
                     .then( () => this.isLoading = false )
             } catch ( e ) {
                 this.isLoading = false
-                Toast.error( `${e.code} - ${e.message}` );
+                Toast.error( e );
             }
         },
         getTotalSales( x = [] ) {
@@ -103,7 +104,7 @@ export default {
                     db.remove()
                     this.getPendingOrder()
                 } catch ( e ) {
-                    Toast.error( `${e.code} - ${e.message}` );
+                    Toast.error( e );
                 }
             }, 300 )
         },
@@ -112,12 +113,36 @@ export default {
                 const { productos } = this.selected
                 this.isModalActive = true
                 this.productos = productos == undefined ? [] : Object.values( productos )
-            }, 300 )
+            }, 100 )
         },
         closeModalproductos( value ) {
             this.isModalActive = value
         }
     },
+    computed: {
+        filteredListaPedido() {
+            if ( this.pendingOrder ) {
+                return this.pendingOrder.filter( ( option = {} ) => {
+                    return (
+                        option.nombre
+                        .toString()
+                        .toLowerCase()
+                        .indexOf( this.buscarPedido.toLowerCase() ) >= 0 ||
+                        option.Norder
+                        .toString()
+                        .toLowerCase()
+                        .indexOf( this.buscarPedido.toLowerCase() ) >= 0 ||
+                        option.user
+                        .toString()
+                        .toLowerCase()
+                        .indexOf( this.buscarPedido.toLowerCase() ) >= 0
+                    );
+                } );
+            } else {
+                return [];
+            }
+        },
+    }
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -63,8 +63,8 @@ export default {
                 hora: moment().format( "LTS" ),
                 modificado: false,
                 aplicado: false,
-                estado: "pendiente",
-                observación: ''
+                estado: "entrante",
+                observacion: []
             };
 
             let db = new RealDB( `KardexPedidos/${this.n_order}` );

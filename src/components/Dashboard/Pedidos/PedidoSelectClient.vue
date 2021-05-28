@@ -64,7 +64,8 @@ export default {
                 modificado: false,
                 aplicado: false,
                 estado: "entrante",
-                observacion: []
+                observacion: [],
+                motivoEstado: ''
             };
 
             let db = new RealDB( `KardexPedidos/${this.n_order}` );

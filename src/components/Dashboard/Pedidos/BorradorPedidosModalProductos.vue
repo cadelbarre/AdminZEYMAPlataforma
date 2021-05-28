@@ -13,9 +13,6 @@
                         <b-table-column field="nombre" label="Descripción Productos" width="40" sortable v-slot="props">
                             {{ props.row.nombre }}
                         </b-table-column>
-                        <b-table-column field="cantidad" label="Cant" width="40" sortable v-slot="props">
-                            {{ props.row.cantidad }}
-                        </b-table-column>
                         <b-table-column field="precioValor" label="P. Bruto" width="40" sortable v-slot="props">
                             {{ formatNumber(props.row.precioValor) }}
                         </b-table-column>
@@ -24,6 +21,9 @@
                         </b-table-column>
                         <b-table-column field="iva" label="IVA" width="40" sortable v-slot="props">
                             {{ props.row.iva }}
+                        </b-table-column>
+                        <b-table-column field="cantidad" label="Cant" width="40" sortable v-slot="props">
+                            {{ props.row.cantidad }}
                         </b-table-column>
                         <b-table-column field="valorTotal" label="V. Neto" width="40" v-slot="props">
                             {{ formatNumber(props.row.valorTotal) }}

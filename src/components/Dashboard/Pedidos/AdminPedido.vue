@@ -19,7 +19,7 @@
                     <div class="level-right">
                         <div class="level-item">
                             <b-field class="buttons">
-                                <b-button label="Entrantes" type="is-warning" outlined :focused="true" @click="getListadoPedido('entrante')"></b-button>
+                                <b-button label="Entrantes" type="is-info" outlined :focused="isFocused" @click="getListadoPedido('entrante')"></b-button>
                                 <b-button label="Rechazados" type="is-danger" outlined @click="getListadoPedido('rechazado')"></b-button>
                                 <b-button label="Despachados" type="is-success" outlined @click="getListadoPedido('despachado')"></b-button>
                                 <b-button label="Pendientes" type="is-primary" outlined @click="getListadoPedido('pendiente')"></b-button>
@@ -27,8 +27,6 @@
                         </div>
                     </div>
                 </div>
-                <b-button @click="prompt">probar</b-button>
-                <!-- <b-table :data="data" :columns="columns" sticky-header striped hoverable paginated per-page="10"></b-table> -->
                 <b-table :data="listadoPedidos == null ? [] : filteredListaPedido" striped hoverable paginated per-page="20" default-sort="Norder" default-sort-direction="DESC" :selected.sync="selected" :loading="isLoading">
                     <b-table-column field="Norder" label="Pedido" width="40" centered sortable v-slot="props">
                         {{ props.row.Norder }}
@@ -59,7 +57,7 @@
                     </b-table-column>
                     <b-table-column width="150" label="Acciones" centered>
                         <div class="buttons">
-                            <div v-if="estadoActual !== 'rechazado'">
+                            <div v-if="prueba == true">
                                 <b-tooltip label="Rechazar" position="is-left" type="is-danger is-light" v-if="estadoActual !== ''">
                                     <b-button type="is-danger" icon-left="delete" @click="cambiarEstado('rechazado')" />
                                 </b-tooltip>
@@ -71,14 +69,17 @@
                                 </b-tooltip>
                             </div>
                             <b-tooltip label="Ver pedido" position="is-right" type="is-success is-light" v-if="estadoActual == 'rechazado'">
-                                <b-button type="is-success" icon-left="square-edit-outline" @click="mostarPedido" />
+                                <b-button type="is-success" icon-left="eye" @click="mostarPedido" />
+                            </b-tooltip>
+                            <b-tooltip label="Ver pedido" position="is-right" type="is-success is-light" v-if="estadoActual == 'despachado'">
+                                <b-button type="is-success" icon-left="eye" @click="despacharPedido"/>
                             </b-tooltip>
                         </div>
                     </b-table-column>
                 </b-table>
             </div>
         </div>
-        <ModalProductos :isModalActive="isModalActive" :productos="productos" @close="closeModalproductos" />
+        <ModalProductos :isModalActive="isModalActive" :productos="productos" @close="closeModal" />
         <b-modal v-model="isModalMotivosActive">
             <div class="modal-card" style="width: 25em; margin: auto;">
                 <header class="modal-card-head">
@@ -92,31 +93,36 @@
                     </b-field>
                 </div>
                 <footer class="modal-card-foot">
-                    <b-button label="Enviar" type="is-danger" />
+                    <b-button label="Enviar" type="is-danger" @click="updateMotivo" />
                 </footer>
             </div>
         </b-modal>
+        <ModalDespacho :isModalActive="isModalDespachoActive" :pedido="selected == null ? {} : selected" @close="closeModal"/>
     </section>
 </template>
 <script>
 import ModalProductos from './BorradorPedidosModalProductos.vue'
+import ModalDespacho from './AdminPedidoModalDespacho.vue'
 import Toast from '@/classes/Toast'
 import _ from 'lodash/string'
 import RealDB from '@/classes/DataBase'
 export default {
     name: 'adminPurchase',
     components: {
-        ModalProductos
+        ModalProductos,
+        ModalDespacho
     },
     data() {
         return {
             listadoPedidos: '',
             selected: null,
-            isLoading: false,
             arrayList: null,
             getList: null,
             estadoActual: 'entrante',
+            isFocused: true,
+            isLoading: false,
             isModalActive: false,
+            isModalDespachoActive: false,
             isModalMotivosActive: false,
             productos: [],
             motivosRechazo: [],
@@ -134,17 +140,17 @@ export default {
             const motivos = await db.getInfo()
             this.motivosRechazo = motivos.val().sort()
         },
-        async cambiarEstado( status ) {
+        async cambiarEstado( state ) {
             this.isLoading = true
-            // if ( status == 'rechazado' ) { await this.prompt() }
+            if ( state == 'rechazado' ) { await this.prompt() }
             setTimeout( async () => {
                 const Norder = this.selected.Norder
                 const db = new RealDB( `KardexPedidos/${Norder}` );
-                const estado = { estado: status }
+                const estado = { estado: state }
                 try {
                     await db.update( estado )
-                    await this.getAdminPedidos()
                     await this.getListadoPedido( this.estadoActual )
+                    this.despacharPedido()
                     this.isLoading = false
                 } catch ( e ) {
                     this.isLoading = false
@@ -156,11 +162,15 @@ export default {
             this.isLoading = true
             const db = new RealDB( "KardexPedidos" );
             try {
-                await db.limitLast( 200 )
-                    .once( "value" )
-                    .then( ( res ) => Object.values( res.val() ) )
-                    .then( ( res ) => this.getList = res )
-                    .then( () => this.isLoading = false )
+                // await db.limitLast( 200 )
+                //     .once( "value" )
+                //     .then( ( res ) => Object.values( res.val() ) )
+                //     .then( ( res ) => this.getList = res )
+                //     .then( () => this.isLoading = false )
+                await db.getInfoRealTime().limitToLast(200).on( 'value', res => {
+                    this.getList = Object.values( res.val() )
+                    this.isLoading = false
+                } )
             } catch ( e ) {
                 this.isLoading = false
                 Toast.error( e );
@@ -168,6 +178,8 @@ export default {
         },
         getListadoPedido( value ) {
             this.estadoActual = value
+            if (value != 'entrante') this.isFocused = false
+                else this.isFocused = true
             this.arrayList = this.getList.filter( x => x.estado == this.estadoActual && x.aplicado == true )
         },
         mostarPedido() {
@@ -177,21 +189,23 @@ export default {
                 this.productos = productos == undefined ? [] : Object.values( productos )
             }, 100 )
         },
-        despacharProducto() {
-
+        despacharPedido() {
+            this.isModalDespachoActive = true
         },
         prompt() {
             this.isModalMotivosActive = true
         },
         // Definido para colocar el motivo del rechazo.
-        async updateMotivo( x ) {
+        async updateMotivo() {
             const Norder = this.selected.Norder
             const db = new RealDB( `KardexPedidos/${Norder}` );
-            const estado = { motivoEstado: x }
-            console.log( "estado", estado );
+            const estado = { motivoEstado: this.radio }
+            this.$emit( 'close' );
 
             try {
-                await db.update( estado )
+                await db.update( estado );
+                this.$children[ 5 ].close()
+
             } catch ( e ) {
                 Toast.error( e );
             }
@@ -203,8 +217,10 @@ export default {
             const lower = _.toLower( x )
             return _.upperFirst( lower )
         },
-        closeModalproductos( value ) {
+        closeModal( value ) {
             this.isModalActive = value
+            this.isModalDespachoActive = value
+
         }
     },
     computed: {
@@ -224,7 +240,6 @@ export default {
                         .toString()
                         .toLowerCase()
                         .indexOf( this.listadoPedidos.toLowerCase() ) >= 0
-
                     );
                 } );
             } else {
@@ -243,7 +258,17 @@ export default {
         mostrarMotivo() {
             if ( this.estadoActual === 'rechazado' ) return true
             else return false
+        },
+        prueba() {
+            const mostrarBotones = {
+                'rechazado': false,
+                'despachado': false,
+                'entrante': true,
+                'pendiente': true
+            }
+            return mostrarBotones[ this.estadoActual ]
         }
+
     }
 
 }

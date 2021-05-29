@@ -14,6 +14,9 @@
             </div>
         </div>
         <DebtClient :clientSelected="selected == null ? {} : selected" />
+        <div class="has-text-centered" v-if="clientName.length > 0">
+            <b-button label="Ver Cartera" type="is-info" icon-left="eye"></b-button>
+        </div>
     </section>
 </template>
 <script>

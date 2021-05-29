@@ -81,24 +81,22 @@ export default {
     data() {
         return {
             infoDebtClient: {},
+            cartera: null,
             loading: false
         };
     },
     methods: {
-        formatNumber(x = 0) {
-            return formattedNumber(x)
-        },
-        getInfoDebtClient(x) {
+        getTotalDeuda(x) {
             let dataDebt = Object.values(x);
             let reducer = (acc, el) => acc + Number(el.valor)
             return dataDebt.reduce(reducer, 0);
         },
-        getDeposit(x) {
+        getAbono(x) {
             let deposit = Object.values(x);
             let reducer = (acc, el) => typeof el.abono == "string" ? Number(acc + el.abono) : acc
             return deposit.reduce(reducer, 0);
         },
-        getBills(x) {
+        getDiasVencidas(x) {
             let bills = Object.values(x)
             moment.locale('es-mx')
             let today = moment(new Date());
@@ -111,7 +109,10 @@ export default {
                 return acc
             }
             return bills.reduce(reducer, { 'count': 0, 'debts': 0 })
-        }
+        },
+        formatNumber(x = 0) {
+            return formattedNumber(x)
+        },
     },
     asyncComputed: {
         async getDebtClient() {
@@ -127,10 +128,11 @@ export default {
                     .orderByEqual("nombre", this.clientSelected.nombre)
                     .then(async (res) => {
                         if (res.val() != null) {
-
-                            debtClient = await that.getInfoDebtClient(res.val());
-                            deposit = await that.getDeposit(res.val());
-                            bills = await that.getBills(res.val());
+                            const cartera = res.val()
+                            this.cartera = cartera
+                            debtClient = await that.getTotalDeuda(cartera);
+                            deposit = await that.getAbono(cartera);
+                            bills = await that.getDiasVencidas(cartera);
 
                             that.infoDebtClient = {
                                 cupo: Number(that.clientSelected.cupo),
@@ -161,6 +163,7 @@ export default {
                     amount: 0,
                     available: 0,
                 };
+                this.cartera = null
                 this.loading = false;
             }
         },

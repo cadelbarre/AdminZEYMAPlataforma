@@ -28,6 +28,13 @@
                         <b-table-column field="valorTotal" label="V. Neto" width="40" v-slot="props">
                             {{ formatNumber(props.row.valorTotal) }}
                         </b-table-column>
+                         <template #empty>
+                        <div class="has-text-centered">
+                            <p class="subtitle has-text-grey-light has-text-weight-light">
+                                El cliente no tiene ningún producto registrado.
+                            </p>
+                        </div>
+                    </template>
                     </b-table>
                 </div>
             </div>

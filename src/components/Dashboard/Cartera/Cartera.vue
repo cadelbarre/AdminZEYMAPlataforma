@@ -32,7 +32,10 @@
                         {{ deadlines(props.row.vence, props.row.fecha) }}
                     </b-table-column>
                     <b-table-column field="vence" label="Dias Vencido" width="40" numeric centered sortable v-slot="props">
-                        {{ daysExpired(props.row.vence) }}
+                        <span class="is-flex is-justify-content-space-around is-align-items-center">
+                            {{ daysExpired(props.row.vence) }}
+                            <b-icon v-if="daysExpired(props.row.vence) > 0" icon="cash" type="is-danger"></b-icon>
+                        </span>
                     </b-table-column>
                     <b-table-column field="valoriva" label="IVA" width="40" sortable numeric v-slot="props">
                         {{ formatNumber(props.row.valoriva) }}
@@ -119,8 +122,8 @@ export default {
 
                 let reducer = ( acc, el ) => {
                     acc[ 'totalNeto' ] += el.neto,
-                    acc[ 'totalAbono' ] += el.abono,
-                    acc[ 'totalSaldo' ] += el.neto - el.abono
+                        acc[ 'totalAbono' ] += el.abono,
+                        acc[ 'totalSaldo' ] += el.neto - el.abono
                     return acc
                 }
                 return this.dataDebt.reduce( reducer, { 'totalNeto': 0, 'totalAbono': 0, 'totalSaldo': 0 } )

@@ -24,7 +24,7 @@
                     </div>
                     <div class="buttons has-text-centered">
                         <b-button type="is-info" icon-left="printer" label="Imprimir" @click="imprimir" />
-                        <b-button label="Cerrar" @click="$emit('close')"/>
+                        <b-button label="Cerrar" icon-left="close-circle" @click="$emit('close')"/>
                     </div>
                 </div>
                 <div class="card-content">

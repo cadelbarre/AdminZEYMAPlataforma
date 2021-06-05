@@ -72,7 +72,7 @@
                                 <b-button type="is-success" icon-left="eye" @click="mostarPedido" />
                             </b-tooltip>
                             <b-tooltip label="Ver pedido" position="is-right" type="is-success is-light" v-if="estadoActual == 'despachado'">
-                                <b-button type="is-success" icon-left="eye" @click="despacharPedido"/>
+                                <b-button type="is-success" icon-left="eye" @click="despacharPedido" />
                             </b-tooltip>
                         </div>
                     </b-table-column>
@@ -97,7 +97,7 @@
                 </footer>
             </div>
         </b-modal>
-        <ModalDespacho :isModalActive="isModalDespachoActive" :pedido="selected == null ? {} : selected" @close="closeModal"/>
+        <ModalDespacho :isModalActive="isModalDespachoActive" :pedido="selected == null ? {} : selected" @close="closeModal" />
     </section>
 </template>
 <script>
@@ -150,7 +150,7 @@ export default {
                 try {
                     await db.update( estado )
                     await this.getListadoPedido( this.estadoActual )
-                    this.despacharPedido()
+                    if ( state == 'despachado' ) { this.despacharPedido() }
                     this.isLoading = false
                 } catch ( e ) {
                     this.isLoading = false
@@ -167,7 +167,7 @@ export default {
                 //     .then( ( res ) => Object.values( res.val() ) )
                 //     .then( ( res ) => this.getList = res )
                 //     .then( () => this.isLoading = false )
-                await db.getInfoRealTime().limitToLast(200).on( 'value', res => {
+                await db.getInfoRealTime().limitToLast( 200 ).on( 'value', res => {
                     this.getList = Object.values( res.val() )
                     this.isLoading = false
                 } )
@@ -178,8 +178,8 @@ export default {
         },
         getListadoPedido( value ) {
             this.estadoActual = value
-            if (value != 'entrante') this.isFocused = false
-                else this.isFocused = true
+            if ( value != 'entrante' ) this.isFocused = false
+            else this.isFocused = true
             this.arrayList = this.getList.filter( x => x.estado == this.estadoActual && x.aplicado == true )
         },
         mostarPedido() {
@@ -200,12 +200,9 @@ export default {
             const Norder = this.selected.Norder
             const db = new RealDB( `KardexPedidos/${Norder}` );
             const estado = { motivoEstado: this.radio }
-            this.$emit( 'close' );
-
             try {
                 await db.update( estado );
-                this.$children[ 5 ].close()
-
+                // this.$children[ 5 ].close()
             } catch ( e ) {
                 Toast.error( e );
             }

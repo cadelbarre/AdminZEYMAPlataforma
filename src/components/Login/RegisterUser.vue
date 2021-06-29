@@ -6,7 +6,7 @@
         </div>
         <!-- Este es un input de busqueda -->
         <b-field label="NIT" message="Ingrese el NIT de su establecimiento. Presione Enter para continuar. ">
-            <b-input ref="nitCustomer" type="text" placeholder="Ej. 900123456" v-model.trim="nit" ></b-input>
+            <b-input ref="nitCustomer" type="text" placeholder="Ej. 900123456" v-model.trim="nit"></b-input>
         </b-field>
         <b-field label="Nombre Establecimiento">
             <b-input type="text" placeholder="Ej. Drogueria Nicolas N3"></b-input>
@@ -36,12 +36,10 @@
     </div>
 </template>
 <script>
-// import Toast from "@/classes/Toast";
-// import RealDB from '@/classes/DataBase'
 export default {
     name: 'register',
-    data(){
-        return{
+    data() {
+        return {
             nit: ''
         }
     },

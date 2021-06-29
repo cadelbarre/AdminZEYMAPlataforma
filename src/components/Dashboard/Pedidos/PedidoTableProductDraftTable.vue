@@ -35,7 +35,7 @@
                                 <b-button type="is-danger" icon-left="delete" @click="borrarProducto" />
                             </b-tooltip>
                             <b-tooltip label="Editar Pedido" position="is-right" type="is-dark">
-                                <b-button type="is-info" icon-left="square-edit-outline" />
+                                <b-button type="is-success" icon-left="square-edit-outline" @click="mostrarModalEditarCantidad" />
                             </b-tooltip>
                         </div>
                     </b-table-column>
@@ -45,6 +45,18 @@
                 </b-field>
             </div>
         </div>
+        <b-modal v-model="isCardModalActive" :width="400" scroll="keep">
+            <div class="card">
+                <div class="card-content is-flex is-justify-content-space-around">
+                    <b-field :label="`Ingrese la nueva cantidad del - ${rowProducto == null ? 'undefined' : rowProducto.nombre}`">
+                        <b-input type="text" ref="editarCantidad" v-model="nuevaCantidad" placeholder="2" icon="file-document-edit-outline"></b-input>
+                        <p class="control">
+                            <b-button label="Actualizar" type="is-info" icon-left="upload" @click="editarCantidad"></b-button>
+                        </p>
+                    </b-field>
+                </div>
+            </div>
+        </b-modal>
     </section>
 </template>
 <script>
@@ -60,6 +72,8 @@ export default {
             draft: null,
             observation: "",
             rowProducto: null,
+            isCardModalActive: false,
+            nuevaCantidad: 0
         }
     },
     methods: {
@@ -76,14 +90,36 @@ export default {
                 } catch ( e ) {
                     Toast.error( e );
                 }
-            }, 300 )
+            }, 600 )
+        },
+        mostrarModalEditarCantidad() {
+            setTimeout( () => {
+                this.isCardModalActive = true
+                this.nuevaCantidad = this.rowProducto.cantidad
+                console.log( this.$refs );
+                // this.$refs.editarCantidad.focus()
+            }, 200 )
+        },
+        async editarCantidad() {
+            const Norder = this.n_order
+            const nuevaValor = {
+                cantidad: this.nuevaCantidad,
+                valorTotal: this.nuevaCantidad * this.rowProducto.precioValor
+            }
+
+            let db = new RealDB( `KardexPedidos/${Norder}/productos/${this.rowProducto.item}` );
+
+            try {
+                this.isCardModalActive = false
+                await db.update( nuevaValor );
+            } catch ( e ) {
+                Toast.error( e );
+            }
         },
         async guardarObservacion() {
             const Norder = this.n_order
-            const obs = { observacion: [this.observation] }
-            let db = new RealDB(
-                `KardexPedidos/${Norder}`
-            );
+            const obs = { observacion: [ this.observation ] }
+            let db = new RealDB( `KardexPedidos/${Norder}` );
 
             try {
                 await db.update( obs );
@@ -100,7 +136,7 @@ export default {
             let db = new RealDB( `KardexPedidos/${this.n_order}` );
             try {
                 await db.getInfoRealTime().on( 'value', res => {
-                    const productos = res.val().productos
+                    const { productos = {} } = res.val()
                     if ( productos !== undefined ) that.draft = Object.values( productos )
                 } )
             } catch ( e ) {

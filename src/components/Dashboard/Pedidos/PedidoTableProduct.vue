@@ -6,7 +6,7 @@
                     <b-input ref="searchProduct" placeholder="Buscar por producto ó codigo" type="search" id="Search" v-model="queryName" expanded autocomplete="off">
                     </b-input>
                 </b-field>
-                <b-table :data="product_list == null ? [] : filteredDataProductsList" striped hoverable :selected.sync="row" paginated per-page="20" :loading="isLoading" default-sort="nombre1" default-sort-direction="ASC">
+                <b-table :data="product_list == null ? [] : filteredDataProductsList" striped hoverable sticky-header height='350' :selected.sync="row" paginated per-page="20" :loading="isLoading" default-sort="nombre1" default-sort-direction="ASC">
                     <b-table-column field="codigo" label="Codigo" width="40" sortable v-slot="props">
                         {{ props.row.codigo }}
                     </b-table-column>
@@ -113,7 +113,7 @@ export default {
                     productos.cantidad *
                     ( ( 100 + productos.iva - productos.descuento ) / 100 );
 
-                e.target.value = '';
+                e.target.value = "";
 
                 const Norder = this.n_order
                 let db = new RealDB(
@@ -166,8 +166,14 @@ export default {
             if ( this.queryName ) {
                 let name_re = Object.values( this.product_list );
                 return name_re.filter(
-                    ( x ) =>
-                    x.nombre1.toLowerCase().indexOf( this.queryName.toLowerCase() ) > -1
+                    ( x ) => {
+                        return (
+                            x.nombre1.toLowerCase()
+                            .indexOf( this.queryName.toLowerCase() ) > -1 || 
+                            x.codigo.toLowerCase()
+                            .indexOf( this.queryName.toLowerCase() ) >= 0
+                        )
+                    }
                 );
             } else {
                 return [];
@@ -186,6 +192,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .dialog .modal-card .modal-card-foot .button {
-    display: inline-flex !important;
+    //display: inline-flex !important;
 }
 </style>

@@ -9,8 +9,9 @@
                 <b-input ref="userLogin" type="email" placeholder="mail@mail.com" v-model.trim="mail"></b-input>
             </b-field>
             <b-field label="Contraseña" :message="error.password" :type="error.password != null ? 'is-danger' : ''">
-                <b-input ref="passwordLogin" type="password" password-reveal placeholder="*******" v-model.trim="password" @keyup.enter="loginIt">
-                </b-input>
+                <!-- <b-input ref="passwordLogin" type="password" password-reveal placeholder="*******" v-model.trim="password" @keyup.enter="loginIt">
+                </b-input> -->
+                <input class="input" ref="passwordLogin" type="password" placeholder="*******" v-model.trim="password" @keyup.enter="loginIt">
             </b-field>
             <div class="field">
                 <label>
@@ -28,7 +29,6 @@
                 </p>
             </div>
         </div>
-        <pre>{{error}}</pre>
     </section>
 </template>
 <script>

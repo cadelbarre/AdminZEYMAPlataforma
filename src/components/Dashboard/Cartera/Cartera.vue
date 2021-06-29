@@ -34,15 +34,14 @@
                     <b-table-column field="vence" label="Dias Vencido" width="40" numeric centered sortable v-slot="props">
                         <span class="is-flex is-justify-content-space-around is-align-items-center">
                             {{ daysExpired(props.row.vence) }}
-                            <!-- <b-icon v-if="daysExpired(props.row.vence) > 0" icon="account-cash" type="is-danger"></b-icon> -->
-                            <b-tag v-if="daysExpired(props.row.vence) > 0" type="is-danger" rounded>Cobro</b-tag>
+                            <b-tag v-if="daysExpired(props.row.vence) >= 0" type="is-danger" rounded>Cobro</b-tag>
                         </span>
                     </b-table-column>
                     <b-table-column field="valoriva" label="IVA" width="40" sortable numeric v-slot="props">
                         {{ formatNumber(props.row.valoriva) }}
                     </b-table-column>
                     <b-table-column field="neto" label="Valor Factura" width="40" numeric :subheading="sumDebtFooter == null ? '' : formatNumber(sumDebtFooter.totalNeto)" v-slot="props">
-                        {{ formatNumber(props.row.neto) }}
+                        {{ formatNumber(props.row.neto)}}
                     </b-table-column>
                     <b-table-column field="abono" label="Abono" width="40" numeric :subheading="sumDebtFooter == null ? '' : formatNumber(sumDebtFooter.totalAbono)" v-slot="props">
                         {{ formatNumber(props.row.abono) }}
